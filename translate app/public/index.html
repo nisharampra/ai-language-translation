@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Translation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        label, textarea, input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Translate Text</h1>
+    <form id="translationForm">
+        <label for="text">Enter text to translate:</label><br>
+        <textarea id="text" rows="4" cols="50"></textarea><br>
+
+        <label for="target_language">Choose target language:</label><br>
+        <select id="target_language">
+            <option value="Spanish">Spanish</option>
+            <option value="Tamil">Tamil</option>
+            <option value="French">French</option>
+            <option value="German">German</option>
+            <!-- Add more languages here -->
+        </select><br>
+
+        <button type="submit">Translate</button>
+    </form>
+
+    <h2>Translated Text:</h2>
+    <div id="translatedText"></div>
+
+    <script>
+        document.getElementById("translationForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const text = document.getElementById("text").value;
+            const target_language = document.getElementById("target_language").value;
+
+            fetch("/translate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text, target_language })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("translatedText").innerText = data.translatedText;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
